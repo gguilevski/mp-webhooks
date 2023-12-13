@@ -1,7 +1,8 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { createResponse } from 'App/Helpers/Customs'
 import Drive from '@ioc:Adonis/Core/Drive'
-import Database from '@ioc:Adonis/Lucid/Database'
+//import Database from '@ioc:Adonis/Lucid/Database'
+import PaymentService from 'App/Services/PaymentService'
 import Application from '@ioc:Adonis/Core/Application'
 
 export default class PaymentsController {
