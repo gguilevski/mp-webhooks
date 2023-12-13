@@ -1,0 +1,128 @@
+/admin/definitions:
+  get:
+    tags:
+      - Manage Definitions
+    summary: Manage Definitions By Status Accepted or Rejected
+    security:
+      - bearerAuth: []
+    parameters:
+      - in: query
+        name: page
+        schema:
+          type: integer
+        description: Page Number of Definitions
+    responses:
+      200:
+        description: Success get definitions by status accepted or rejected
+      401:
+        description: Unauthorized
+      404:
+        description: Definitions not found
+
+/admin/definitions/review:
+  get:
+    tags:
+      - Manage Definitions
+    summary: Get All Definitions That Need To Be Review
+    security:
+      - bearerAuth: []
+    parameters:
+      - in: query
+        name: page
+        schema:
+          type: integer
+        description: Page Number of Definitions
+    responses:
+      200:
+        description: Success get definitions that need to be review
+      401:
+        description: Unauthorized
+      404:
+        description: Definitions not found
+
+/admin/definitions/{id}/review:
+  put:
+    tags:
+      - Manage Definitions
+    summary: Accept or Reject Definition
+    security:
+      - bearerAuth: []
+    parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+        description: Numeric ID of Definition
+    requestBody:
+      description: 2 for Accepted, 3 for Rejected
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - status_definition_id
+            properties:
+              status_definition_id:
+                type: integer
+                example: 2
+    responses:
+      200:
+        description: Success accept or reject definition
+      401:
+        description: Unauthorized
+      404:
+        description: Definition not found
+
+/admin/definitions/deleted:
+  get:
+    tags:
+      - Manage Definitions
+    summary: Get All Deleted Definitions
+    security:
+      - bearerAuth: []
+    responses:
+      200:
+        description: Success get all deleted definitions by user
+      401:
+        description: Unauthorized
+      404:
+        description: Definitions not found
+
+/admin/definitions/{id}/delete:
+  delete:
+    tags:
+      - Manage Definitions
+    summary: Delete Permanent A Definition
+    security:
+      - bearerAuth: []
+    parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+        description: Numeric ID of Definition
+    responses:
+      200:
+        description: Success delete permanent definition
+      401:
+        description: Unauthorized
+      404:
+        description: Definition not found
+
+/admin/statistics:
+  get:
+    tags:
+      - Statistics definitions and users
+    summary: Get total data definitions and users
+    security:
+      - bearerAuth: []
+    responses:
+      200:
+        description: Success get all deleted definitions by user
+      401:
+        description: Unauthorized
+      500:
+        description: Internal Server Error

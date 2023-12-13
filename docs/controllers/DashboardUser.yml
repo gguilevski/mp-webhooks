@@ -1,0 +1,12 @@
+/dashboard:
+  get:
+    tags:
+      - Dashboard User
+    summary: Dashboard User for Create, Edit, and Delete Their Definitions
+    security:
+      - bearerAuth: []
+    responses:
+      200:
+        description: Success definitions list by user login
+      401:
+        description: Unauthorized

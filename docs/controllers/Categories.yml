@@ -1,0 +1,10 @@
+/categories:
+  get:
+    tags:
+      - Categorías
+    summary: Get All Categories
+    responses:
+      200:
+        description: Success get all categories
+      404:
+        description: Categories not found

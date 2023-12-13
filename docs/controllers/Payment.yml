@@ -1,0 +1,52 @@
+/payments/preference:
+  post:
+    tags:
+      - Payments
+    summary: Get Payment Link
+    description: Get Payment Link
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - amount
+            properties:
+              amount:
+                type: number
+                example: 100.25
+    produces:
+      - application/json
+    responses:
+      200:
+        description: Success
+      400:
+        description: Bad Request
+
+
+/payments/notification:
+  post:
+    tags:
+      - Payments
+    summary: Get Payment Link
+    description: Get Payment Link
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - amount
+            properties:
+              amount:
+                type: number
+                example: 100.25
+    produces:
+      - application/json
+    responses:
+      200:
+        description: Success
+      400:
+        description: Bad Request

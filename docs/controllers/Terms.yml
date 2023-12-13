@@ -1,0 +1,21 @@
+/terms/new:
+  get:
+    tags:
+      - Terms
+    summary: Get Newly Added Terms
+    responses:
+      200:
+        description: Success get newly added terms
+      404:
+        description: Terms not found
+
+/terms/random:
+  get:
+    tags:
+      - Terms
+    summary: Get Random Terms & Definitions
+    responses:
+      200:
+        description: Success get random terms & definitions
+      404:
+        description: Terms not found
