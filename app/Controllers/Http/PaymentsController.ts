@@ -1,6 +1,5 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { createResponse } from 'App/Helpers/Customs'
-import Drive from '@ioc:Adonis/Core/Drive'
 //import Database from '@ioc:Adonis/Lucid/Database'
 import PaymentService from 'App/Services/PaymentService'
 import Application from '@ioc:Adonis/Core/Application'
@@ -46,9 +45,6 @@ export default class PaymentsController {
 
     public async notification({ request, response }: HttpContextContract): Promise<void> {
 
-        const filePath = await Drive.getUrl('filePath.json')
-
-
         try {
             const dateTimeNow = DateTime.now()
 
@@ -89,53 +85,35 @@ export default class PaymentsController {
     }
 
     public async getNotification({ response }: HttpContextContract): Promise<void> {
+        try {
+            const fs = require('node:fs');
+            const folderPath = Application.tmpPath('uploads')
+
+            const notifications: any = [];
+
+            const files = fs.readdirSync(folderPath)
+
+            files.forEach(function (file: string) {
+                const rawdata = fs.readFileSync(folderPath + '/' + file);
+                notifications.push(JSON.parse(rawdata))
+            })
+
+            this.res.data = notifications
 
 
-        const fs = require('node:fs');
-        const folderPath = Application.tmpPath('uploads')
+            return response.status(this.res.code).json(this.res)
+        } catch (error: any) {
+            this.res.code = 500
+            this.res.status = 'Error'
+            this.res.message = error.message
 
+            if (error.code === 'E_ROW_NOT_FOUND') {
+                this.res.code = 404
+                this.res.status = 'Not Found'
+                this.res.message = 'Definitions not found'
+            }
 
-        const notifications: any = [];
-
-        const files = fs.readdirSync(folderPath)
-
-        files.forEach(function (file: string) {
-
-
-            const rawdata = fs.readFileSync(folderPath + '/' + file);
-
-            notifications.push(JSON.parse(rawdata))
-
-        })
-
-
-
-
-        this.res.data = notifications
-
-        return response.status(this.res.code).json(this.res)
-
-    } catch(error: any) {
-        this.res.code = 500
-        this.res.status = 'Error'
-        this.res.message = 'Internal server error'
-
-        if (error.code === 'E_ROW_NOT_FOUND') {
-            this.res.code = 404
-            this.res.status = 'Not Found'
-            this.res.message = 'User not found'
+            return response.status(this.res.code).json(this.res)
         }
-
-        if (error.code === 'E_AUTHORIZATION_FAILURE') {
-            this.res.code = 403
-            this.res.status = 'Forbidden'
-            this.res.message = "You can't perform this action"
-        }
-
-        return response.status(this.res.code).json(this.res)
     }
-}
-
-
-
 }
