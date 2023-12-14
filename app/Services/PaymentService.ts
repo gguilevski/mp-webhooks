@@ -29,9 +29,9 @@ export default class PaymentService {
                 ],
                 auto_return: 'approved',
                 back_urls: {
-                    success: this.mp.successUrl,
-                    failure: this.mp.failureUrl,
-                    pending: this.mp.pendingUrl
+                    success: 'https://frontend.nobissalud.com/',
+                    failure: 'https://frontend.nobissalud.com/',
+                    pending: 'https://frontend.nobissalud.com/'
                 }
             })
         }

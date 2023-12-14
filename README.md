@@ -9,6 +9,8 @@ npm install
 node ace migration:run
 node ace db:seed
 
+mkdir -p build/tmp/uploads
+
 
 ```bash
 node ace migration:run
@@ -19,6 +21,10 @@ npm run start
 
 yarn dev
 ```
+
+npm run build && cd build && npm ci --production && node server.js
+
+CI= npm run build
 
 # Backup
 mysqldump --host=127.0.0.1 --user=root --default-character-set=utf8 "cfi_admin" > "C:\laragon\www\cfi-admin\cfi_all_admin.sql"
