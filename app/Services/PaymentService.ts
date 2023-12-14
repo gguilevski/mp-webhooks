@@ -21,19 +21,23 @@ export default class PaymentService {
                 payer_email: "test_user_46945293@testuser.com",
                 items: [
                     {
-                        title: "Nobis Dummy Title",
-                        description: "Nobis Dummy description",
-                        picture_url: "http://www.myapp.com/myimage.jpg",
+                        title: 'Nobis Dummy Title',
+                        description: 'Nobis Dummy description',
+                        picture_url: 'https://mla-s2-p.mlstatic.com/988269-MLA46389806195_062021-O.jpg',
                         category_id: "category123",
                         quantity: 1,
                         unit_price: price
                     }
                 ],
                 auto_return: 'approved',
+                external_reference: JSON.stringify({
+                    couponId: 8888,
+                    QR: true,
+                }),
                 back_urls: {
-                    success: 'https://frontend.nobissalud.com/',
-                    failure: 'https://frontend.nobissalud.com/',
-                    pending: 'https://frontend.nobissalud.com/'
+                    success: 'https://frontend.nobissalud.com/#/dashboard/estado-de-cuenta',
+                    failure: 'https://frontend.nobissalud.com/#/dashboard/estado-de-cuenta',
+                    pending: 'https://frontend.nobissalud.com/#/dashboard/estado-de-cuenta'
                 }
             })
         }
