@@ -84,6 +84,29 @@ export default class PaymentsController {
         }
     }
 
+    public async getPayment({ params, response }: HttpContextContract): Promise<void> {
+        const { id: collectionId }: Record<string, number> = params
+
+        try {
+            this.res.data = await PaymentService.getPayment(collectionId)
+
+            return response.status(this.res.code).json(this.res)
+        } catch (error: any) {
+            this.res.code = 500
+            this.res.status = 'Error'
+            this.res.message = error.message
+
+            if (error.code === 'E_ROW_NOT_FOUND') {
+                this.res.code = 404
+                this.res.status = 'Not Found'
+                this.res.message = 'Definitions not found'
+            }
+
+            return response.status(this.res.code).json(this.res)
+        }
+    }
+
+
     public async getNotification({ response }: HttpContextContract): Promise<void> {
         try {
             const fs = require('node:fs');
@@ -93,10 +116,59 @@ export default class PaymentsController {
 
             const files = fs.readdirSync(folderPath)
 
-            files.forEach(function (file: string) {
+
+            //this.res.data = await PaymentService.getPayment(68752272274)
+
+            await Promise.all(files.map(async (file: string) => {
                 const rawdata = fs.readFileSync(folderPath + '/' + file);
-                notifications.push(JSON.parse(rawdata))
-            })
+                const mp = JSON.parse(rawdata)
+
+                const payment: any = await PaymentService.getPayment(mp.data.id)
+
+                mp.payment = {
+                    date_created: payment.date_created,
+                    date_approved: payment.date_approved,
+                    status: payment.status,
+                    items: payment.additional_info.items
+                }
+
+                // console.log(payment.date_created)
+
+                notifications.push({
+                    id: payment.id,
+                    description: payment.description,
+                    date_created: payment.date_created,
+                    date_approved: payment.date_approved,
+                    status: payment.status,
+                    items: payment.additional_info.items
+                })
+            }));
+
+
+
+            // files.forEach(async (file: string) => {
+            //     const rawdata = fs.readFileSync(folderPath + '/' + file);
+            //     const mp = JSON.parse(rawdata)
+
+            //     const payment: any = await PaymentService.getPayment(mp.data.id)
+
+            //     console.log(payment.date_created)
+
+            //     notifications.push(payment)
+            // });
+
+
+
+            // files.forEach(async (file: string) {
+            //     const rawdata = fs.readFileSync(folderPath + '/' + file);
+            //     const mp = JSON.parse(rawdata)
+
+            //     const payment: any = await PaymentService.getPayment(mp.data.id)
+
+            //     console.log(payment.date_created)
+
+            //     notifications.push(mp)
+            // })
 
             this.res.data = notifications
 

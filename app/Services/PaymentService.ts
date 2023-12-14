@@ -4,8 +4,10 @@ export default class PaymentService {
 
     protected static mp: any = Config.get('app.mercadoPago')
 
-    //Access Token APP_USR-2329133413881945-101210-99c61e8176b8974df8ae7aab48e15795-1509805036
-
+    public static async getPayment(collectionId: number) {
+        return await fetch(`https://api.mercadopago.com/v1/payments/${collectionId}?access_token=${this.mp.accessToken}`)
+            .then((response) => { return response.json() })
+    }
 
     public static async createPayment(price: number) {
 

@@ -27,8 +27,7 @@ Route.get('/', ({ response }) => {
 Route.post('payments/preference', 'PaymentsController.getPaymentLink')
 Route.post('payments/notification', 'PaymentsController.notification')
 Route.get('payments/notification', 'PaymentsController.getNotification')
-
-
+Route.get('payments/payment/:id', 'PaymentsController.getPayment')
 
 Route.group(() => {
   Route.post('register', 'AuthController.register')
