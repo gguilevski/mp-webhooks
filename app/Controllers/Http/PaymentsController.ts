@@ -45,13 +45,34 @@ export default class PaymentsController {
 
     public async notification({ request, response }: HttpContextContract): Promise<void> {
 
+        const { action, data, type } = request.only(['action', 'data', 'type'])
+        const paymentId: number = parseInt(data.id)
+
         try {
             const dateTimeNow = DateTime.now()
 
             const { writeFile } = require('fs');
 
             const path = Application.tmpPath('uploads') + '/mp' + dateTimeNow.toUnixInteger() + '.json'
-            const config = request.all()
+
+            const payment: any = await PaymentService.getPayment(paymentId)
+
+            const reference = JSON.parse(payment.external_reference)
+
+            const config = {
+                benId: reference.benId,
+                compId: reference.compId,
+                paymentId: paymentId,
+                preferenceId: payment.collector_id,
+                status: payment.status,
+                type: type,
+                action: action,
+                reference: payment.external_reference,
+                amount: payment.amount,
+                dateCreated: payment.date_created,
+                dateApproved: payment.date_approved,
+                webhook: request.all()
+            }
 
             writeFile(path, JSON.stringify(config, null, 2), (error: any) => {
                 if (error) {
@@ -121,27 +142,30 @@ export default class PaymentsController {
 
             await Promise.all(files.map(async (file: string) => {
                 const rawdata = fs.readFileSync(folderPath + '/' + file);
-                const mp = JSON.parse(rawdata)
+                
+                notifications.push(JSON.parse(rawdata))
+                
+                // const mp = JSON.parse(rawdata)
 
-                const payment: any = await PaymentService.getPayment(mp.data.id)
+                // const payment: any = await PaymentService.getPayment(mp.data.id)
 
-                mp.payment = {
-                    date_created: payment.date_created,
-                    date_approved: payment.date_approved,
-                    status: payment.status,
-                    items: payment.additional_info.items
-                }
+                // mp.payment = {
+                //     date_created: payment.date_created,
+                //     date_approved: payment.date_approved,
+                //     status: payment.status,
+                //     items: payment.additional_info.items
+                // }
 
-                // console.log(payment.date_created)
+                // // console.log(payment.date_created)
 
-                notifications.push({
-                    id: payment.id,
-                    description: payment.description,
-                    date_created: payment.date_created,
-                    date_approved: payment.date_approved,
-                    status: payment.status,
-                    items: payment.additional_info.items
-                })
+                // notifications.push({
+                //     id: payment.id,
+                //     description: payment.description,
+                //     date_created: payment.date_created,
+                //     date_approved: payment.date_approved,
+                //     status: payment.status,
+                //     items: payment.additional_info.items
+                // })
             }));
 
 
