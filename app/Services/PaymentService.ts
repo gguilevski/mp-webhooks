@@ -9,7 +9,7 @@ export default class PaymentService {
             .then((response) => { return response.json() })
     }
 
-    public static async createPayment(price: number) {
+    public static async createPayment(benId: number, compId: number, amount: number) {
 
         const settings = {
             method: 'POST',
@@ -26,13 +26,13 @@ export default class PaymentService {
                         picture_url: 'https://mla-s2-p.mlstatic.com/988269-MLA46389806195_062021-O.jpg',
                         category_id: "category123",
                         quantity: 1,
-                        unit_price: price
+                        unit_price: amount
                     }
                 ],
                 auto_return: 'approved',
                 external_reference: JSON.stringify({
-                    couponId: 8888,
-                    QR: true,
+                    benId: benId,
+                    compId: compId,
                 }),
                 back_urls: {
                     success: 'https://frontend.nobissalud.com/#/dashboard/estado-de-cuenta',

@@ -11,14 +11,11 @@ export default class PaymentsController {
 
     public async getPaymentLink({ request, response }: HttpContextContract): Promise<void> {
 
-        const price: number = request.input('amount')
-
-
-        //return response.status(this.res.code).json(price)
+        const { benId, compId, amount } = request.only(['benId', 'compId', 'amount'])
 
         try {
 
-            const payment: any = await PaymentService.createPayment(price)
+            const payment: any = await PaymentService.createPayment(benId, compId, amount)
             this.res.data = payment
 
             return response.status(this.res.code).json(this.res)
@@ -142,9 +139,9 @@ export default class PaymentsController {
 
             await Promise.all(files.map(async (file: string) => {
                 const rawdata = fs.readFileSync(folderPath + '/' + file);
-                
+
                 notifications.push(JSON.parse(rawdata))
-                
+
                 // const mp = JSON.parse(rawdata)
 
                 // const payment: any = await PaymentService.getPayment(mp.data.id)

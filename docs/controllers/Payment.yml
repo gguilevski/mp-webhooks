@@ -2,6 +2,8 @@
   post:
     tags:
       - Payments
+    security:
+      - bearerAuth: []
     summary: Get Payment Link
     description: Get Payment Link
     requestBody:
@@ -11,8 +13,14 @@
           schema:
             type: object
             required:
+              - benId
+              - compId
               - amount
             properties:
+              benId:
+                type: integer
+              compId:
+                type: integer
               amount:
                 type: number
                 example: 100.25
@@ -23,7 +31,6 @@
         description: Success
       400:
         description: Bad Request
-
 
 /payments/notification:
   post:
