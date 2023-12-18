@@ -105,6 +105,54 @@ export default class PaymentsController {
 
     public async notificationPro({ request, response }: HttpContextContract): Promise<void> {
 
+        try {
+            const dateTimeNow = DateTime.now()
+
+            const { writeFile } = require('fs');
+
+            const path = Application.tmpPath('uploads') + '/mp' + dateTimeNow.toUnixInteger() + '.json'
+
+   
+            const config = {
+                tipo: 'Pro',
+                datetime: DateTime.now(),
+                webhook: request.all()
+            }
+
+            writeFile(path, JSON.stringify(config, null, 2), (error: any) => {
+                if (error) {
+                    console.log('An error has occurred ', error)
+                }
+                console.log('Data written successfully to disk')
+            })
+
+            this.res.data = request.all()
+
+            return response.status(this.res.code).json(this.res)
+        } catch (error: any) {
+            this.res.code = 500
+            this.res.status = 'Error'
+            this.res.message = 'Internal server error'
+
+            if (error.code === 'E_ROW_NOT_FOUND') {
+                this.res.code = 404
+                this.res.status = 'Not Found'
+                this.res.message = 'User not found'
+            }
+
+            if (error.code === 'E_AUTHORIZATION_FAILURE') {
+                this.res.code = 403
+                this.res.status = 'Forbidden'
+                this.res.message = "You can't perform this action"
+            }
+
+            return response.status(this.res.code).json(this.res)
+        }
+    }
+
+
+    public async notificationProBack({ request, response }: HttpContextContract): Promise<void> {
+
         const { action, data, type } = request.only(['action', 'data', 'type'])
         const paymentId: number = parseInt(data.id)
 

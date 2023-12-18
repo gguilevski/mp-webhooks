@@ -34,7 +34,7 @@ export default class PaymentService {
                     benId: benId,
                     compId: compId,
                 }),
-                notification_url: 'https://mp-webhooks.onrender.com/payments/notification',
+                notification_url: 'https://mp-webhooks.onrender.com/payments/notification/pro',
                 back_urls: {
                     success: 'https://frontend.nobissalud.com/#/dashboard/estado-de-cuenta',
                     failure: 'https://frontend.nobissalud.com/#/dashboard/estado-de-cuenta',
