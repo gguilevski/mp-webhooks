@@ -1,0 +1,5 @@
+[build]
+  base    = "/"
+  publish = "build"
+  command = "npm run build"
+  environment = { YARN_VERSION = "3.2.2" }
